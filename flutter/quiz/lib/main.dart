@@ -23,42 +23,56 @@ void main() {
 // If the function body can fit in a line we can use the alternative syntax
 // void main() => runApp(Quiz());
 
-class Quiz extends StatelessWidget {
+class Quiz extends StatefulWidget {
+  @override
+  _QuizState createState() => _QuizState();
+}
+
+class _QuizState extends State<Quiz> {
+  var questionIndex = 0;
+  var questions = [
+    '''Have you traveled to an area of high-risk for COVID-19?''',
+    '''Have you been around someone who recently traveled to an area of high-risk and is also sick?''',
+    '''Have you been around someone who is known to have COVID-19?''',
+    '''Have you been told by a health official that you may have been exposed to the virus''',
+    '''Have you had a fever recently? Or do you think you have a fever?''',
+    '''Do you have a cough?''',
+    '''Do you feel tired for no reason?''',
+    '''Do you have body aches?''',
+    '''Do you have a sore throat?''',
+    '''Do you have a reduced sense of smell or taste?''',
+    '''Are you experiencing diarrhea?''',
+    '''Are you feeling mild to moderate shortness of breath or mild to moderate difficulty breathing?''',
+    '''Do you have chest pain?''',
+    '''COVID-19 can affect people who have weaker immune systems from things like chemotherapy, HIV/AIDS, organ transplant, being pregnant, or prolonged steroid use. Do you fall under this category?'''
+  ];
   void answerResponse() {
-    print('hello');
+    // Flutter re-renders (rebuilds) the specific UI elements that are linked to the questionIndex property
+    setState(() {
+      questionIndex += 1;
+    });
+    print(questionIndex);
   }
 
-  // Flutter calls build everytime when there's update on the screen
   @override // Good practice to add this to functions we are overriding
   Widget build(BuildContext context) {
     // Scaffold offers some API's which implements material design visual layout structure.
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Quiz'),
-        ),
+            title: Column(
+          children: [Text('COVID-19'), Text('Self Assessment')],
+        )),
         body: Column(
           children: <Widget>[
-            Text('Question'),
+            Text(questions[questionIndex]),
             RaisedButton(
-              child: Text('Answer 1'),
+              child: Text('Yes'),
               // Passing function pointer to onPressed
               onPressed: answerResponse,
             ),
             RaisedButton(
-              child: Text('Answer 2'),
-              // Anonymous function: Single line
-              onPressed: () => print('Yo'),
-            ),
-            RaisedButton(
-              child: Text('Answer 3'),
-              // Anonymous function: Block
-              onPressed: () {
-                print('heyya');
-              },
-            ),
-            RaisedButton(
-              child: Text('Answer 4'),
+              child: Text('No'),
               onPressed: answerResponse,
             ),
           ],
