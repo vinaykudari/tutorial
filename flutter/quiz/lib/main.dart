@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './question.dart';
+
 // We can declare the constructors in any of the below ways
 
 // class Test {
@@ -28,8 +30,9 @@ class Quiz extends StatefulWidget {
   _QuizState createState() => _QuizState();
 }
 
+// _ before any name makes it private property and can be accessed from the same file
 class _QuizState extends State<Quiz> {
-  var questionIndex = 0;
+  var _questionIndex = 0;
   var questions = [
     '''Have you traveled to an area of high-risk for COVID-19?''',
     '''Have you been around someone who recently traveled to an area of high-risk and is also sick?''',
@@ -49,9 +52,9 @@ class _QuizState extends State<Quiz> {
   void answerResponse() {
     // Flutter re-renders (rebuilds) the specific UI elements that are linked to the questionIndex property
     setState(() {
-      questionIndex += 1;
+      _questionIndex += 1;
     });
-    print(questionIndex);
+    print(_questionIndex);
   }
 
   @override // Good practice to add this to functions we are overriding
@@ -65,7 +68,8 @@ class _QuizState extends State<Quiz> {
         )),
         body: Column(
           children: <Widget>[
-            Text(questions[questionIndex]),
+            // Improves performance in case of complex Widgets
+            Question(questions[_questionIndex]),
             RaisedButton(
               child: Text('Yes'),
               // Passing function pointer to onPressed
