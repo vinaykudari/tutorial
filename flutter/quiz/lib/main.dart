@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './questionnaire.dart';
+import './result.dart';
 
 // We can declare the constructors in any of the below ways
 
@@ -38,8 +38,11 @@ class Quiz extends StatefulWidget {
 
 // _ before any name makes it private property and can be accessed from the same file
 class _QuizState extends State<Quiz> {
+  // var infers the type from the value assigned, here it is int now we cannot assign any type other than int to _questionIndex
   var _questionIndex = 0;
-  var questions = [
+  // final is runtime constant whereas const is compile time constant
+  // dart stores the references to the value objects instead of values, so if we want to make sure that the value doesnt change we can make the value constant
+  static const _questions = const [
     '''Have you traveled to an area of high-risk for COVID-19?''',
     '''Have you been around someone who recently traveled to an area of high-risk and is also sick?''',
     '''Have you been around someone who is known to have COVID-19?''',
@@ -56,7 +59,7 @@ class _QuizState extends State<Quiz> {
     '''COVID-19 can affect people who have weaker immune systems from things like chemotherapy, HIV/AIDS, organ transplant, being pregnant, or prolonged steroid use. Do you fall under this category?'''
   ];
 
-  void answerResponse() {
+  void _answerResponse() {
     // Flutter re-renders (rebuilds) the specific UI elements that are linked to the questionIndex property
     setState(() {
       _questionIndex += 1;
@@ -79,16 +82,15 @@ class _QuizState extends State<Quiz> {
             )
           ],
         )),
-        body: Column(
-          children: <Widget>[
-            // Having a compound widget improves performance and makes the code base lean in case of complex Widgets
-            Question(questions[_questionIndex]),
-            // ... takes out the elements in a list and unwraps them
-            ...['Yes', 'No'].map((answerText) {
-              return Answer(answerResponse, answerText);
-            })
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            // To make the code clean we can convert any widget tree into a widget
+            // Ternary operator to show the result at the end of Questionnaire
+            ? Questionnaire(
+                answerResponse: _answerResponse,
+                questionIndex: _questionIndex,
+                questions: _questions,
+              )
+            : Result(),
       ),
     );
   }
