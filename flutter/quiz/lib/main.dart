@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
 
 // We can declare the constructors in any of the below ways
 
@@ -15,6 +16,11 @@ import './question.dart';
 //   Test({String name, int age=23}){
 //     this.name = name;
 //     this.age = age;
+//   }
+
+//   This another constructor for class Test, which sets the age = 20 by default
+//   Test.aDifferentConstructor(this.name){
+//      this.age = 20
 //   }
 // }
 
@@ -49,6 +55,7 @@ class _QuizState extends State<Quiz> {
     '''Do you have chest pain?''',
     '''COVID-19 can affect people who have weaker immune systems from things like chemotherapy, HIV/AIDS, organ transplant, being pregnant, or prolonged steroid use. Do you fall under this category?'''
   ];
+
   void answerResponse() {
     // Flutter re-renders (rebuilds) the specific UI elements that are linked to the questionIndex property
     setState(() {
@@ -64,21 +71,22 @@ class _QuizState extends State<Quiz> {
       home: Scaffold(
         appBar: AppBar(
             title: Column(
-          children: [Text('COVID-19'), Text('Self Assessment')],
+          children: [
+            Text('COVID-19'),
+            Text(
+              'Self Assessment',
+              style: TextStyle(fontSize: 12),
+            )
+          ],
         )),
         body: Column(
           children: <Widget>[
-            // Improves performance in case of complex Widgets
+            // Having a compound widget improves performance and makes the code base lean in case of complex Widgets
             Question(questions[_questionIndex]),
-            RaisedButton(
-              child: Text('Yes'),
-              // Passing function pointer to onPressed
-              onPressed: answerResponse,
-            ),
-            RaisedButton(
-              child: Text('No'),
-              onPressed: answerResponse,
-            ),
+            // ... takes out the elements in a list and unwraps them
+            ...['Yes', 'No'].map((answerText) {
+              return Answer(answerResponse, answerText);
+            })
           ],
         ),
       ),
