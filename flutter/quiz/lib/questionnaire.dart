@@ -5,13 +5,15 @@ import './answer.dart';
 
 class Questionnaire extends StatelessWidget {
   final List<String> questions;
+  final List<double> answerScores;
   final int questionIndex;
-  final Function answerResponse;
+  final Function answerQuestion;
 
   Questionnaire({
     @required this.questions,
+    @required this.answerScores,
     @required this.questionIndex,
-    @required this.answerResponse,
+    @required this.answerQuestion,
   });
 
   @override
@@ -22,7 +24,12 @@ class Questionnaire extends StatelessWidget {
         Question(questions[questionIndex]),
         // ... takes out the elements in a list and unwraps them
         ...['Yes', 'No'].map((answerText) {
-          return Answer(answerResponse, answerText);
+          double score = -0.25;
+          if (answerText == 'Yes') {
+            score = answerScores[questionIndex];
+          }
+          // Passing an anonymous function as we need to pass score to answerQuestion
+          return Answer(() => answerQuestion(score), answerText);
         })
       ],
     );

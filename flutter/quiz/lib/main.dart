@@ -40,6 +40,7 @@ class Quiz extends StatefulWidget {
 class _QuizState extends State<Quiz> {
   // var infers the type from the value assigned, here it is int now we cannot assign any type other than int to _questionIndex
   var _questionIndex = 0;
+  double _totalScore = 0;
   // final is runtime constant whereas const is compile time constant
   // dart stores the references to the value objects instead of values, so if we want to make sure that the value doesnt change we can make the value constant
   static const _questions = const [
@@ -59,7 +60,25 @@ class _QuizState extends State<Quiz> {
     '''COVID-19 can affect people who have weaker immune systems from things like chemotherapy, HIV/AIDS, organ transplant, being pregnant, or prolonged steroid use. Do you fall under this category?'''
   ];
 
-  void _answerResponse() {
+  static const _answerScores = const [
+    6.0,
+    4.0,
+    10.0,
+    8.0,
+    8.0,
+    8.0,
+    6.0,
+    8.0,
+    8.0,
+    10.0,
+    8.0,
+    12.0,
+    10.0,
+    6.0
+  ];
+
+  void _answerQuestion(score) {
+    _totalScore += score;
     // Flutter re-renders (rebuilds) the specific UI elements that are linked to the questionIndex property
     setState(() {
       _questionIndex += 1;
@@ -86,11 +105,12 @@ class _QuizState extends State<Quiz> {
             // To make the code clean we can convert any widget tree into a widget
             // Ternary operator to show the result at the end of Questionnaire
             ? Questionnaire(
-                answerResponse: _answerResponse,
+                answerQuestion: _answerQuestion,
                 questionIndex: _questionIndex,
                 questions: _questions,
+                answerScores: _answerScores,
               )
-            : Result(),
+            : Result(_totalScore),
       ),
     );
   }
