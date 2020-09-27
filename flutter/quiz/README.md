@@ -1,6 +1,6 @@
-# quiz
+# COVID-19 Risk Assessment 
 
-A new Flutter project.
+My first cross-platform app using Flutter.
 
 ## Getting Started
 
